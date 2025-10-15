@@ -4,6 +4,7 @@ import './App.css';
 
 function App() {
     const [time, setTime] = useState(30);
+    const [contador, setContador] = useState(0);
     const [balloonStyleGlobo, setBalloonStyleGlobo] = useState({balloonStyle: {
             width: '75px',
             height: '83px',
@@ -24,24 +25,35 @@ function App() {
         const x = Math.floor(Math.random() *1100) + 1;
         return `translate(${x}px,${y}px)`;
     }
+    const createGlobo = () => {
+        const width = widthGlobo();
+        const value = {
+            balloonStyle: {
+                width: `${width}px`,
+                height: `${width+8}px`,
+                backgroundColor: colorsRandom(),
+                transform: transformGlobo(),
+            }
+        }
+        return value;
+    }
+    const onGloboClick = () => {
+        setContador((prev) => prev + 1);
+        setBalloonStyleGlobo(createGlobo())
+    }
 
     useEffect(() => {
-        const cronometro = setInterval(() => {
-            setTime((valor) => valor - 1)
-        }, 1000);
+        let cronometro = 0
+        if ( time != 0 ) {
+            cronometro = setInterval(() => {
+                setTime((valor) => valor - 1)
+            }, 1000);
 
-        if ( time % 2 == 0 ) {
-            const width = widthGlobo();
-            const newWidthGlobo = {
-                balloonStyle: {
-                    width: `${width}px`,
-                    height: `${width+8}px`,
-                    backgroundColor: colorsRandom(),
-                    transform: transformGlobo(),
-                }
+            if ( time % 2 == 0 ) {
+                setBalloonStyleGlobo(createGlobo())
             }
-            setBalloonStyleGlobo(newWidthGlobo)
         }
+
         return () => clearInterval(cronometro);
     }, [time]);
 
@@ -49,12 +61,12 @@ function App() {
         <>
             <div className="flex flex-col min-h-150  gap-4 justify-center items-center">
                 <div className="flex w-full justify-between items-center">
-                    <p><strong>`Cantidad: time`</strong></p>
+                    <p><strong>{`Cantidad: ${contador}`}</strong></p>
                     <p><strong>Revienta los globos</strong></p>
                     <p><strong>{`Tiempo: ${time}`}</strong></p>
                 </div>
-                <div className="w-full flex-1 bg-amber-50 pt-5 rounded-lg border-5 border-purple-400 relative">
-                    <Globo balloonStyle={balloonStyleGlobo} />
+                <div className="w-full flex-1 bg-amber-50 pt-5 rounded-lg border-5 border-purple-400 relative" >
+                    <Globo balloonStyle={balloonStyleGlobo} method={onGloboClick} />
                 </div>
             </div>
         </>

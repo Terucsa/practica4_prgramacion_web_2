@@ -4,30 +4,22 @@ interface GloboProps {
         height: string,
         transform: string,
         backgroundColor: string,
-    },
+    }
+    method: () => void
 }
-
-// const balloonNudo = {
-//     position: 'relative',
-//     width: '20px',
-//     height: '10px',
-//     backgroundColor: 'red',
-//     borderRadius: '25%',
-//     top: '95%',
-//     left: '39%',
-// };
 
 const balloonLine = {
     position: 'relative',
     width: '3px',
-    height: '30px',
-    backgroundColor: 'blue',
-    top: '95%',
-    left: '51%',
+    height: '60px',
+    backgroundColor: '#E5E1E1',
+    top: '85%',
+    left: '49%',
     opacity: 0.8,
+    zIndex: -1,
 };
 
-function Globo({ balloonStyle }: GloboProps) {
+function Globo({ balloonStyle, method }: GloboProps) {
     const mergedStyle = {
         ...balloonStyle.balloonStyle,
         position: 'relative',
@@ -35,13 +27,28 @@ function Globo({ balloonStyle }: GloboProps) {
         boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)',
     };
 
-    console.log(mergedStyle);
-
+    const nuddoFuction = ({width,backgroundColor}: mergedStyle) => {
+        const widthValue = parseInt(width);
+        const valueWidth = widthValue < 50 ? '10px' : '20px';
+        const left = widthValue < 50 ? '30%' : '39%';
+        const top = widthValue < 50 ? '90%' : '95%';
+        const balloonStyleNudo = {
+            position: 'relative',
+            width: valueWidth,
+            height: '10px',
+            backgroundColor: backgroundColor,
+            borderRadius: '25%',
+            top: top,
+            left: left,
+        };
+        return balloonStyleNudo;
+    }
+    console.log(nuddoFuction(mergedStyle))
     return (
         <>
-            <div >
+            <div onClick={method}>
                 <div style={mergedStyle}>
-                    {/*<div style={balloonNudo}></div>*/}
+                    <div style={nuddoFuction(mergedStyle)}></div>
                     <div style={balloonLine}></div>
                 </div>
             </div>
